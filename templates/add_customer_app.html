@@ -1,5 +1,3 @@
-
-
 {% load static %}
 {% load crispy_forms_tags %}
 <!DOCTYPE html>
@@ -29,8 +27,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"></script>
-<link rel="stylesheet" href="{% static 'dashboard/styles1.css' %}" /
-<link rel="stylesheet" href="{% static "w3.css"%}">
+<link rel="stylesheet" href="{% static 'dashboard/styles1.css' %}">
+
 <style>
     body {font-family: Arial, Helvetica, sans-serif;}
 * {box-sizing: border-box;}
@@ -313,9 +311,44 @@ code {
   opacity: 0.5;
   position: relative;
 }
-  </style>
-</head>
+.avatar {
+  vertical-align: right;
+  right: 50px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin-left: 810%;
+  margin-top: -35%;
+}
 
+
+
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f1f1f1;
+  min-width: 60px;
+  overflow: auto;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+  right: 2%;
+  margin-top: 15%;
+
+}
+
+.dropdown-content a {
+  color:black;
+  padding: 6px 36px;
+  text-decoration: none;
+  text-align: left;
+  display: block;
+}
+
+.dropdown a:hover {background-color: #ddd;}
+
+.show {display: block;}
+</style>
 <body>
 <header>
     <nav class="navbar navbar-expand-lg fixed-top p-md-0">
@@ -324,41 +357,45 @@ code {
           <i class="fa-solid fa-bars"></i>
         </div>
         <div class="d-none d-md-none close">
-     <i class="fa-solid fa-xmark fa-xl"></i>
-</div>
+           <i class="fa-solid fa-xmark fa-xl"></i>
+        </div>
         <a class="navbar-brand d-none d-md-block mt-1" href="#">
-      <h2 class="h2">BILL SNAP</h2>
-        </a>
+        <h2 class="h2">BILL SNAP</h2>
 
+        <img src="{% static 'dashboard/assets/image/profile1.jpg'%}" alt="Avatar" class="avatar" onclick="myFunction()">
+        <div id="myDropdown" class="dropdown-content">
+          <a href="customerlist.html">Customer</a>
+          <a href="plans.html">Plans</a>
+          <a href="index.html">Log Out</a>
+        </div>
+        </div>
+        </a>
         <div class="d-flex ms-auto gap-4 pe-3">
 
-      <a>Logout</a>
         </div>
       </div>
     </nav>
   </header>
-
-
-
-
 <div class="main mx-auto">
+  <dialog id="myDialog">This is a notification window...!!!!!!
+    <button onclick="closeDialog()" class="close">&times;</button>
+  </dialog>
   <div class="row">
-    <div class="left d-none d-md-block col-md-4">
+    <div class="left d-none d-md-block col-md-4"style="padding-top:15px;">
       <div class="menu-frag d-flex flex-column p-3 ps-4 gap-3">
         <div>
           <i class='bx bx-grid-alt' ></i>
-
-          <a href="dashboard.html" >Dashboard</a>
+          <a href="{% url 'dashboard' slug %}" >Dashboard</a>
         </div>
         <div>
           <i class='bx bx-analyse' ></i>
 
-          <a href="estimate.html">Estimates</a>
+          <a href="{% url 'estimates' slug %}">Estimates</a>
         </div>
         <div>
           <i class='bx bx-cog' ></i>
 
-          <a href="settings.html">Settings</a>
+          <a href="{% url 'update-app' slug %}">App Settings</a>
         </div>
       </div>
       <hr>
@@ -367,12 +404,11 @@ code {
         <div class="customer-frag d-flex flex-column p-3 pt-1 gap-3">
           <div>
             <i class='bx bx-box' ></i>
-
-            <a href="create.html"  id="active">Create</a>
+            <a href="{% url 'add-customer-form' slug %}"id="active">Create</a>
           </div>
           <div>
             <i class='bx bx-box' ></i>
-            <a href="customerlist.html">Customer List</a>
+            <a href="{% url 'customerlist' slug %}">Customer List</a>
           </div>
           <div>
             <i class='bx bx-log-out' ></i>
@@ -380,7 +416,7 @@ code {
           </div>
           <div>
             <i class='bx bx-archive-in' ></i>
-            <a href="manage.html">Manage Group</a>
+            <a href="{% url 'groups-panel' slug %}">Manage Group</a>
           </div>
           <div>
             <i class='bx bx-bar-chart' ></i>
@@ -403,7 +439,7 @@ code {
 
           <div>
             <i class='bx bx-coin-stack' ></i>
-            <a href="plans.html">Plans</a>
+            <a href="{% url 'plans-panel' slug %}">Plans</a>
           </div>
           <div>
             <i class='bx bx-heart' ></i>
@@ -524,7 +560,7 @@ code {
                 <details>
                   <summary>
                     <div class="button exist">
-                      <a href="existing-user.html">Existing User</a>
+                      <a href="{% url 'add-existing-user' app.slug %}">Existing User</a>
                     </div>
                   </summary>
                 </details>

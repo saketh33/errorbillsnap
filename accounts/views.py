@@ -33,7 +33,7 @@ def app_registration(request, appslug):
         if not User.objects.filter(email=email).exists():
             if len(password) < 6:
                 messages.error(request, 'Password is too short')
-                return render(request, 'register.html')
+                return redirect('add-customer-form', appslug)
 
             user = User.objects.create_user(username=username, email=email)
             user.set_password(password)
@@ -47,10 +47,10 @@ def app_registration(request, appslug):
             return redirect('add-customer-form', appslug)
 
         messages.warning(request, "This Email already exists!")
-        return render(request, 'register.html', context)
+        return redirect('add-customer-form', appslug)
     else:
         messages.warning(request, "This username already exists!")
-        return render(request, 'register.html', context)
+        return redirect('add-customer-form', appslug)
 
 class RegistrationView(View):
     def get(self, request):

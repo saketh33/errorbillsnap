@@ -120,7 +120,7 @@ def customerlist(request,slug):
     app=applists.objects.get(slug=slug)
     details = Profile.objects.filter(apps=app).values_list('user__username', 'slug', 'id')
     return render(request, 'customerlist.html', {'details':details, 'slug':slug})
-    
+
 @login_required
 def deletecust(request,utility_name):
     deli=customer.objects.get(utility_name=utility_name)
@@ -202,14 +202,18 @@ def uploadlis(request):
 def dashboard(request, slug):
     return render(request, 'dashboard.html', {'slug' : slug})
 
+@login_required
+def estim(request, slug):
+    return render(request, 'estimates.html', {'slug' : slug})
+
 def add_customer_form(request, slug):
     app = applists.objects.get(slug=slug)
-    return render(request, 'add_customer_app.html', {'app': app})
+    return render(request, 'add_customer_app.html', {'app': app,'slug' : slug})
 
 def add_existing_user(request, slug):
     profiles = Profile.objects.filter(admin=False).exclude(apps__slug=slug)
     app = applists.objects.get(slug=slug)
-    return render(request, 'add_existing_user.html', {'profiles': profiles, 'app': app})
+    return render(request, 'add_existing_user.html', {'profiles': profiles, 'app': app,'slug' : slug})
 
 def add_customer_app(request, slug):
     username = request.GET.get('username')
@@ -235,10 +239,14 @@ def update_profile_plan(request, slug):
     if pre_plan:
         pre_plan=pre_plan.first()
         profile.plans.remove(pre_plan)
-        
+
     profile.plans.add(new_plan)
     profile.plan_active = new_active_status
     profile.paid = new_paid_status
     print(new_active_status, new_plan, new_paid_status)
     profile.save(update_fields=['plan', 'plan_active', 'paid'])
     return redirect('show_profile', profile.slug, new_plan.app.slug)
+
+@login_required
+def bulkup(request, slug):
+    return render(request, 'bulkupload.html', {'slug' : slug})

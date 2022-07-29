@@ -19,7 +19,7 @@ def groups_panel(request, slug):
                 'slug': slug
             }
             return render(request, 'groups-panel/panel.html', payload)
-        
+
         form = GroupForm(request.POST)
         if form.is_valid():
             group = form.save(commit=False)
@@ -43,12 +43,12 @@ def show_group(request, slug):
             form = SubscribeForm()
             existing_users = Profile.objects.filter(apps=group.app).exclude(group=group)
             users_ = []
-            for i in users:
+            for i in existing_users:
                 group_title = 'No Group'
                 g = i.group_set.filter(app=group.app)
                 if g.exists():
                     group_title = g.first().title
-                user_ = {'username': i.user.username, 'group': group_title}
+                user_ = {'username': i.user.username, 'group': group_title,'full_name':i.full_name}
                 users_.append(user_)
             payload = {
                 'group': group,
@@ -60,7 +60,7 @@ def show_group(request, slug):
                 'update_group_form': GroupForm(instance=group)
             }
             return render(request, 'groups-panel/group.html', payload)
-        
+
         # 'POST' method
         form = SubscribeForm(request.POST)
         group = Group.objects.filter(slug=slug).first()
@@ -92,7 +92,7 @@ def add_customer_to_group(request, slug):
     user = Profile.objects.get(user__username=username)
 
     group = Group.objects.get(slug=slug)
-    
+
     pre_group = user.group_set.filter(app__appname=group.app.appname).first()
     if pre_group:
         pre_group.members.remove(user)
@@ -128,4 +128,3 @@ def update_user_group(request, slug, groupslug):
             is_dummy=True
         )
         create_history(user=profile.user, to_group=new_group, from_group=current_group, upgrade=True)"""
-        

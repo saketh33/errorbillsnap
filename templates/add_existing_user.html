@@ -1,56 +1,221 @@
 {% load static %}
 {% load crispy_forms_tags %}
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <link rel="stylesheet" href="{% static 'w3.css' %}" />
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>billsnap</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous" />
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"
+    integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"
+    integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous">
+  </script>
+ <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" />
+
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200;0,300;0,400;0,500;0,700;0,800;1,200;1,300;1,400;1,500;1,600;1,700&display=swap"
+    rel="stylesheet" />
+    <link rel="stylesheet" href="{% static 'dashboard/styles1.css' %}">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+     <script src="http://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+     <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js" ></script>
+
 </head>
-<body class='w3-padding'>
-<div class='w3-green w3-round w3-margin-bottom w3-padding w3-large'>Add Existing Users to {{app.appname}}</div>
 
-<div class='w3-half w3-container'>
-    <h4>Existing Users</h4>
-    {% for profile in profiles %}
-    <div class='w3-container w3-row w3-small w3-padding ' >
-        <h3 class='w3-medium w3-left'>@{{profile.user.username}}</h3>
-        <button class='w3-right w3-blue w3-button' onclick="addCustomerApp(this);" value="{{profile.user.username}}" url="{% url 'add-customer-app' app.slug %}" >
-            Add
-        </button>
+<body>
+<header>
+    <nav class="navbar navbar-expand-lg fixed-top p-md-0">
+      <div class="container-fluid">
+        <div class="d-md-none menu" >
+          <i class="fa-solid fa-bars"></i>
+        </div>
+        <div class="d-none d-md-none close" >
+     <i class="fa-solid fa-xmark fa-xl"></i>
+</div>
+        <a class="navbar-brand d-none d-md-block mt-1" href="#">
+      <h2 class="h2">BILL SNAP</h2>
+        </a>
+
+        <div class="d-flex ms-auto gap-4 pe-3">
+
+      <a>Logout</a>
+        </div>
+      </div>
+    </nav>
+  </header>
+  <div class="main mx-auto">
+    <dialog id="myDialog">This is a notification window...!!!!!!
+      <button onclick="closeDialog()" class="close">&times;</button>
+    </dialog>
+    <div class="row">
+      <div class="left d-none d-md-block col-md-4"style="padding-top:15px;">
+        <div class="menu-frag d-flex flex-column p-3 ps-4 gap-3">
+          <div>
+            <i class='bx bx-grid-alt' ></i>
+            <a href="{% url 'dashboard' slug %}" >Dashboard</a>
+          </div>
+          <div>
+            <i class='bx bx-analyse' ></i>
+
+            <a href="{% url 'estimates' slug %}">Estimates</a>
+          </div>
+          <div>
+            <i class='bx bx-cog' ></i>
+
+            <a href="{% url 'update-app' slug %}">App Settings</a>
+          </div>
+        </div>
+        <hr>
+        <div class="menu-frag mt-3 ps-3">
+          <h4>Customer</h4>
+          <div class="customer-frag d-flex flex-column p-3 pt-1 gap-3">
+            <div>
+              <i class='bx bx-box' ></i>
+              <a href="{% url 'add-customer-form' slug %}"id="active">Create</a>
+            </div>
+            <div>
+              <i class='bx bx-box' ></i>
+              <a href="{% url 'customerlist' slug %}">Customer List</a>
+            </div>
+            <div>
+              <i class='bx bx-log-out' ></i>
+              <a href="bulk.html">Bulk Upload</a>
+            </div>
+            <div>
+              <i class='bx bx-archive-in' ></i>
+              <a href="{% url 'groups-panel' slug %}">Manage Group</a>
+            </div>
+            <div>
+              <i class='bx bx-bar-chart' ></i>
+              <a href="pending.html">Pending approvals</a>
+            </div>
+            <div>
+              <i class='bx bx-message' ></i>
+              <a href="message.html">Messaging</a>
+            </div>
+          </div>
+        </div>
+        <hr>
+        <div class="menu-frag mt-3 ps-3">
+          <h4>Payments</h4>
+          <div class="pay-frag d-flex flex-column  p-3 pt-1  gap-3">
+            <div>
+              <i class='bx bx-list-ul' ></i>
+              <a href="transcations.html">Transactions </a>
+            </div>
+
+            <div>
+              <i class='bx bx-coin-stack' ></i>
+              <a href="{% url 'plans-panel' slug %}">Plans</a>
+            </div>
+            <div>
+              <i class='bx bx-heart' ></i>
+              <a href="request.html">Requests</a>
+            </div>
+          </div>
+        </div>
+
     </div>
-    {% endfor %}
-</div>
+    <div class="col right" id="customer-list">
+        <h4>existing users</h4>
+        <table class="table table-fluid" id="myTable">
+        <thead>
+        <tr><th>Name</th><th>Email</th><th>Status</th></tr>
+        </thead>
+        <tbody>
+        {% for profile in profiles %}
+        <tr><td>{{profile.user.username}}</td><td>{{profile.user.email}}</td><td><button class='w3-right w3-blue w3-button' onclick="addCustomerApp(this);" value="{{profile.user.username}}" url="{% url 'add-customer-app' app.slug %}" >
+            Add
+        </button></td></tr>
+        {% endfor %}
+        </tbody>
+        </table>
+    </div>
 
-<div class='w3-half w3-padding w3-border' >
-    <input id="search" url="{% url 'add-customer-app' app.slug %}" placeholder="Enter username to add ....." class='w3-input w3-border w3-round w3-margin-right' />
-    <button class='w3-center w3-margin w3-green w3-button' onclick="addCustomerAppSearch(this);" >
-        Add
-    </button>
-</div>
+    <script>
+        $(document).ready( function () {
+        $('#myTable').DataTable();
+    } );
+    </script>
 
-</body>
+
+      </div>
+    </div>
+  </div>
+
+
+</div>
+</div>
+</div>
+</div>
+</section>
+
 <script>
-    function addCustomerApp(obj){
-        var url = obj.getAttribute('url') + '?username=' + obj.value;
-        $.ajax({
-            type: 'GET',
-            url: url,
-            success: function(resp) {
-                document.location.reload(true);
-            }
-        })
-    } 
-    function addCustomerAppSearch(obj){
-        var inp = document.getElementById('search');
-        var url = inp.getAttribute('url') + '?username=' + inp.value;
-        $.ajax({
-            type: 'GET',
-            url: url,
-            success: function(resp) {
-                document.location.reload(true);
-            }
-        })
-    } 
-
+function myFunction() {
+  var input, filter, table, tr, td, i, txtValue;
+  input = document.getElementById("myInput");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("table_filter");
+  tr = table.getElementsByTagName("tr");
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[0];
+    if (td) {
+      txtValue = td.textContent || td.innerText;
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    }
+  }
+}
 </script>
+
+
+
+
+</div>
+  </div>
+</div>
+</div>
+</section>
+</body>
+
+
+
+<script>
+    "use strict";
+let leftie = document.querySelector('.left')
+let menuh = document.querySelector('.menu')
+let closeh = document.querySelector('.close')
+let right = document.querySelector('.right')
+
+
+menuh.addEventListener('click', function () {
+  menuh.classList.toggle('d-none')
+  closeh.classList.toggle('d-none')
+  leftie.classList.toggle('d-none')
+  right.classList.toggle('overlay')
+
+})
+closeh.addEventListener('click', function () {
+  menuh.classList.toggle('d-none')
+  closeh.classList.toggle('d-none')
+  leftie.classList.toggle('d-none')
+  right.classList.toggle('overlay')
+
+})
+</script>
+
+
 </html>
